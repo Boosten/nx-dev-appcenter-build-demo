@@ -1,0 +1,150 @@
+{
+  "version": 1,
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "defaultProject": "appcenter-build",
+  "schematics": {
+    "@nrwl/angular": {
+      "application": {
+        "linter": "eslint"
+      },
+      "library": {
+        "linter": "eslint"
+      },
+      "storybook-configuration": {
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/angular:application": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nrwl/angular:component": {
+      "style": "css"
+    }
+  },
+  "projects": {
+    "appcenter-build": {
+      "projectType": "application",
+      "root": "apps/appcenter-build",
+      "sourceRoot": "apps/appcenter-build/src",
+      "prefix": "tmp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/appcenter-build",
+            "index": "apps/appcenter-build/src/index.html",
+            "main": "apps/appcenter-build/src/main.ts",
+            "polyfills": "apps/appcenter-build/src/polyfills.ts",
+            "tsConfig": "apps/appcenter-build/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "apps/appcenter-build/src/favicon.ico",
+              "apps/appcenter-build/src/assets"
+            ],
+            "styles": ["apps/appcenter-build/src/styles.css"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/appcenter-build/src/environments/environment.ts",
+                  "with": "apps/appcenter-build/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "appcenter-build:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "appcenter-build:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "appcenter-build:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/appcenter-build/src/**/*.ts",
+              "apps/appcenter-build/src/**/*.html"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/appcenter-build"],
+          "options": {
+            "jestConfig": "apps/appcenter-build/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "appcenter-build-e2e": {
+      "root": "apps/appcenter-build-e2e",
+      "sourceRoot": "apps/appcenter-build-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/appcenter-build-e2e/cypress.json",
+            "tsConfig": "apps/appcenter-build-e2e/tsconfig.e2e.json",
+            "devServerTarget": "appcenter-build:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "appcenter-build:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/appcenter-build-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  }
+}
