@@ -24,8 +24,4 @@ pushd ../../../..
 # install dependencies
 npm ci
 npm run build -- --project=my-app
-
-popd
-pushd ../..
-
-npx cap sync
+npm run nx run my-app:sync:ios
