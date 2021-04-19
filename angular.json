@@ -1,6 +1,7 @@
 {
   "version": 1,
   "cli": {
+    "analytics": "b674fc22-2e1e-4766-b97d-57678b4d76a8",
     "defaultCollection": "@nrwl/angular"
   },
   "defaultProject": "appcenter-build",
